@@ -7,10 +7,14 @@ import json
 
 
 class SecretsManager:
-    def __init__(self) -> None:
-        self.secrets_manager_client = boto3.client(
-            "secretsmanager"
-        )
+    def __init__(self, aws_profile: Union[str, None] = None) -> None:
+        if not aws_profile:
+            self.secrets_manager_client = boto3.client(
+                "secretsmanager"
+            )
+        else:
+            self.secrets_manager_client = boto3.Session(
+                profile_name=aws_profile).client("secretsmanager")
 
     @staticmethod
     def create_dict_string(secret: dict) -> str:
@@ -59,7 +63,7 @@ class SecretsManager:
 
     def get_secrets(
         self
-    ) -> List[Dict[str, Union[bytes, str]]]:
+    ) -> List[Dict[str, str]]:
         full_secrets = list()
         next_token: Union[str, None] = None
         while True:

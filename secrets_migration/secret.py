@@ -13,6 +13,7 @@ class Secret:
         self.secret_string: Union[str, None] = (
             kwargs["SecretString"] if "SecretString" in kwargs else None
         )
+        self.secret_description: str = kwargs["Description"] if "Description" in kwargs else ""
         self.version_stages: List[str] = kwargs["VersionStages"]
         self.created_date = kwargs["CreatedDate"]
 
@@ -23,6 +24,9 @@ class Secret:
 
         if self.secret_string:
             secret["SecretString"] = self.secret_string
+        
+        if self.secret_description:
+            secret["Description"] = self.secret_description
 
         return secret
 
