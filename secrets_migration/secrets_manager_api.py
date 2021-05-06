@@ -78,7 +78,3 @@ class SecretsManager:
                 break
         
         return full_secrets
-
-
-
-#arn:aws:secretsmanager:eu-west-2:527773648562:secret:FillerSecret-hXwcLC

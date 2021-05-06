@@ -82,11 +82,21 @@ class TestSecretManager(unittest.TestCase):
             )
         self.assertEqual(len(sm.get_secrets()), 1)
 
-    # Need to test big data to ensure next token works
 
-
-
-
+    @mock_secretsmanager
+    def test_next_token_getting_secrets(self):
+        sm = SecretsManager()
+        total_secrets = 0
+        while total_secrets < 120:
+            secret = sm.create_dict_string({"test": f"secret_{total_secrets}"})
+            sm.put_secret(
+                secret_name=f"Secret{total_secrets}",
+                secret=secret,
+                secret_description=f"This is secret number {total_secrets}"
+            )
+            total_secrets += 1
+        
+        self.assertEqual(len(sm.get_secrets()), 120)
 
 
 if __name__ == "__main__":
