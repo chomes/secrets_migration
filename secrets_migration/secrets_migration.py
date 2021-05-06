@@ -30,11 +30,27 @@ class SecretsMigration:
             )
 
     def fetch_current_accounts_secret_info(self) -> List[Dict[str, str]]:
+        """Get all of the details apart from the secret itself for all your secrets in your
+        existing account
+
+        Returns:
+            List[Dict[str, str]]: Returns all of your secret details
+        """
         return self.current_account.get_secrets()
 
     def convert_secret_info_to_secret_helpers(
         self, secret_info: List[Dict[str, str]]
     ) -> List[Secret]:
+        """Using the list from fetch_current_accounts_secret_info
+        Loop over each secret and fetch the actual secret along with adding the description
+        for the secret so we can get it ready to migrate.
+
+        Args:
+            secret_info (List[Dict[str, str]]): [description]
+
+        Returns:
+            List[Secret]: [description]
+        """
         secret_helpers = list()
         for secret_data in secret_info:
             secret: Secret = self.current_account.get_secret(
@@ -46,6 +62,20 @@ class SecretsMigration:
         return secret_helpers
 
     def migrate_secrets(self) -> Union[Exception, bool]:
+        """Migrate your secrets from current_account to migrate_account
+
+        Raises:
+            NoMigrationAccountError: Raised when you have not specified an aws profile
+            for the migration_account
+            FailedToMigrateSecretsError: This first one fails due to parameter problems
+            provided code isn't change this should not be raised.
+            FailedToMigrateSecretsError: Raised when a secret does not exist, 
+            this should not happen unless you delete secrets during the migration process
+            on the current account.
+
+        Returns:
+            Union[Exception, bool]: Returns either True or Exception that was raised
+        """
         if not self.migrate_account:
             raise NoMigrationAccountError
 
