@@ -12,7 +12,7 @@ from secrets_migration.exceptions import (
 class SecretsMigration:
     def __init__(
         self,
-        current_account: Union[str, None],
+        current_account: Union[str, None] = None,
         migrating_account: Union[str, None] = None,
     ) -> None:
         if not current_account:
