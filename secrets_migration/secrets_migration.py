@@ -61,6 +61,21 @@ class SecretsMigration:
 
         return secret_helpers
 
+    def check_secret_exists(self, secret: Secret) -> bool:
+        """Check if secret exists in the account already before adding it.
+
+        Args:
+            secret (Secret): Requires secret module to be passed in.
+
+        Returns:
+            bool: Returns true or false.
+        """
+        try:
+            self.migrate_account.get_secret(secret_id=secret.name)
+            return True
+        except InvalidSecretError:
+            return False
+
     def migrate_secrets(self) -> Union[Exception, bool]:
         """Migrate your secrets from current_account to migrate_account
 
@@ -69,7 +84,7 @@ class SecretsMigration:
             for the migration_account
             FailedToMigrateSecretsError: This first one fails due to parameter problems
             provided code isn't change this should not be raised.
-            FailedToMigrateSecretsError: Raised when a secret does not exist, 
+            FailedToMigrateSecretsError: Raised when a secret does not exist,
             this should not happen unless you delete secrets during the migration process
             on the current account.
 
@@ -87,13 +102,16 @@ class SecretsMigration:
                 secret_info=secret_info
             )
             for secret in secret_helpers:
-                self.migrate_account.put_secret(
-                    secret_name=secret.name,
-                    secret=secret.secret_string
-                    if "SecretString" in secret.__dict__()
-                    else secret.secret_binary,
-                    secret_description=secret.secret_description,
-                )
+                if self.check_secret_exists(secret=secret):
+                    pass
+                else:
+                    self.migrate_account.put_secret(
+                        secret_name=secret.name,
+                        secret=secret.secret_string
+                        if "SecretString" in secret.__dict__()
+                        else secret.secret_binary,
+                        secret_description=secret.secret_description,
+                    )
 
             return True
         except PutSecretError as error:
