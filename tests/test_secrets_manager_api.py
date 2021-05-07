@@ -24,7 +24,7 @@ class TestSecretManager(unittest.TestCase):
         secret = sm.create_dict_string({"test": "two"})
         self.assertIsInstance(
             sm.put_secret(
-                secret_name="Test secret",
+                secret_name="Testsecret",
                 secret=secret,
                 secret_description="Testing secret",
             ),
