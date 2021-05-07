@@ -37,7 +37,7 @@ class TestSecretManager(unittest.TestCase):
         secret = sm.create_dict_byte({"test": "two"})
         self.assertIsInstance(
             sm.put_secret(
-                secret_name="Test secret",
+                secret_name="Testsecret",
                 secret=secret,
                 secret_description="Testing secret"
             )
@@ -48,7 +48,7 @@ class TestSecretManager(unittest.TestCase):
         sm = SecretsManager()
         with self.assertRaises(PutSecretError):
             sm.put_secret(
-                secret_name="Test secret",
+                secret_name="Testsecret",
                 secret=None,
                 secret_description="Testing secret"
             )

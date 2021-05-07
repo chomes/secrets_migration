@@ -9,7 +9,7 @@ class TestSecret(unittest.TestCase):
         super().__init__(methodName=methodName)
         self.secret_data = {
             "ARN": "False arn",
-            "Name": "Test name",
+            "Name": "Testname",
             "VersionId": "Version ID 5",
             "VersionStages": "Version number 5",
             "CreatedDate": "4555"
@@ -24,7 +24,7 @@ class TestSecret(unittest.TestCase):
         self.assertEqual(secret.__dict__(),
          {
              "ARN": "False arn",
-             "Name": "Test name",
+             "Name": "Testname",
              "SecretString": json.dumps({"Test": "Two"})
          })
         del self.secret_data["SecretString"]
@@ -38,7 +38,7 @@ class TestSecret(unittest.TestCase):
         self.assertEqual(secret.__dict__(),
         {
             "ARN": "False arn",
-            "Name": "Test name",
+            "Name": "Testname",
             "SecretBinary": json.dumps({"Test": "Two"}).encode()
         }
         )
@@ -64,21 +64,6 @@ class TestSecret(unittest.TestCase):
         {"Test": "Two"} )
         del self.secret_data["SecretBinary"]
     
-    
-
-        
-
-    
-
-
-
-
-
-
-
-
-
-
 
 if __name__ == "__main__":
     unittest.main()
