@@ -79,7 +79,7 @@ class SecretsMigration:
     def migrate_secrets(self, kms_key_id: str) -> Union[Exception, bool]:
         """Migrate your secrets from current_account to migrate_account
         Args:
-            kms_key_id (str): The keyId used to encrypt the secrets for the 
+            kms_key_id (str): The keyId used to encrypt the secrets for the
             MIGRATION account please use either:
             * The ARN role
             * The alias of the CMK must be "alias/alias_of_cmk" for it to work,
@@ -117,7 +117,7 @@ class SecretsMigration:
                         if "SecretString" in secret.__dict__()
                         else secret.secret_binary,
                         secret_description=secret.secret_description,
-                        kms_key_id=kms_key_id
+                        kms_key_id=kms_key_id,
                     )
 
             return True

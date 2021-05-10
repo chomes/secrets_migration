@@ -21,11 +21,14 @@ class TestSecretManager(unittest.TestCase):
     @staticmethod
     @mock_kms
     def create_cmk():
-        kms = boto3.client("kms") # type: botostubs.KMS
+        kms = boto3.client("kms")  # type: botostubs.KMS
         kms_key_creation = kms.create_key(
-            Description="test",
-            KeyUsage="ENCRYPT_DECRYPT")
-        kms.create_alias(AliasName="alias/secretsmanager", TargetKeyId=kms_key_creation["KeyMetadata"]["KeyId"])
+            Description="test", KeyUsage="ENCRYPT_DECRYPT"
+        )
+        kms.create_alias(
+            AliasName="alias/secretsmanager",
+            TargetKeyId=kms_key_creation["KeyMetadata"]["KeyId"],
+        )
 
     @mock_secretsmanager
     def test_put_secret_string(self):
@@ -37,7 +40,7 @@ class TestSecretManager(unittest.TestCase):
                 secret_name="Testsecret",
                 secret=secret,
                 secret_description="Testing secret",
-                kms_key_id="alias/secretsmanager"
+                kms_key_id="alias/secretsmanager",
             ),
             str,
         )
@@ -52,7 +55,7 @@ class TestSecretManager(unittest.TestCase):
                 secret_name="Testsecret",
                 secret=secret,
                 secret_description="Testing secret",
-                kms_key_id="alias/secretsmanager"
+                kms_key_id="alias/secretsmanager",
             ),
             str,
         )
@@ -66,7 +69,7 @@ class TestSecretManager(unittest.TestCase):
                 secret_name="Testsecret",
                 secret=None,
                 secret_description="Testing secret",
-                kms_key_id="alias/secretsmanager"
+                kms_key_id="alias/secretsmanager",
             )
 
     @mock_secretsmanager
@@ -75,8 +78,10 @@ class TestSecretManager(unittest.TestCase):
         secret = sm.create_dict_string({"test": "two"})
         self.create_cmk()
         sm.put_secret(
-            secret_name="Testsecret", secret=secret, 
-            secret_description="Testing secret", kms_key_id="alias/secretsmanager"
+            secret_name="Testsecret",
+            secret=secret,
+            secret_description="Testing secret",
+            kms_key_id="alias/secretsmanager",
         )
         self.assertEqual(
             sm.get_secret(secret_id="Testsecret").secret_string,
@@ -95,8 +100,10 @@ class TestSecretManager(unittest.TestCase):
         self.create_cmk()
         secret = sm.create_dict_string({"test": "two"})
         sm.put_secret(
-            secret_name="Testsecret", secret=secret, 
-            secret_description="Testing secret", kms_key_id="alias/secretsmanager"
+            secret_name="Testsecret",
+            secret=secret,
+            secret_description="Testing secret",
+            kms_key_id="alias/secretsmanager",
         )
         self.assertEqual(len(sm.get_secrets()), 1)
 
@@ -111,7 +118,7 @@ class TestSecretManager(unittest.TestCase):
                 secret_name=f"Secret{total_secrets}",
                 secret=secret,
                 secret_description=f"This is secret number {total_secrets}",
-                kms_key_id="alias/secretsmanager"
+                kms_key_id="alias/secretsmanager",
             )
             total_secrets += 1
 

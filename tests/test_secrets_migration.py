@@ -13,12 +13,14 @@ class TestSecretsMigration(unittest.TestCase):
     @staticmethod
     @mock_kms
     def create_cmk():
-        kms = boto3.client("kms") # type: botostubs.KMS
+        kms = boto3.client("kms")  # type: botostubs.KMS
         kms_key_creation = kms.create_key(
-            Description="test",
-            KeyUsage="ENCRYPT_DECRYPT")
-        kms.create_alias(AliasName="alias/secretsmanager", TargetKeyId=kms_key_creation["KeyMetadata"]["KeyId"])
-
+            Description="test", KeyUsage="ENCRYPT_DECRYPT"
+        )
+        kms.create_alias(
+            AliasName="alias/secretsmanager",
+            TargetKeyId=kms_key_creation["KeyMetadata"]["KeyId"],
+        )
 
     @mock_secretsmanager
     def test_fetching_current_account_secret_info(self):
@@ -33,7 +35,7 @@ class TestSecretsMigration(unittest.TestCase):
                 secret_name=f"Secret{total_secrets}",
                 secret=secret,
                 secret_description=f"This is secret number {total_secrets}",
-                kms_key_id="alias/secretsmanager"
+                kms_key_id="alias/secretsmanager",
             )
             total_secrets += 1
         self.assertEqual(
@@ -48,8 +50,10 @@ class TestSecretsMigration(unittest.TestCase):
             {"test": "secret_fool"}
         )
         secrets_migration.current_account.put_secret(
-            secret_name="Testsecret", secret=secret, 
-            secret_description="Testing secret", kms_key_id="alias/secretsmanager"
+            secret_name="Testsecret",
+            secret=secret,
+            secret_description="Testing secret",
+            kms_key_id="alias/secretsmanager",
         )
         secret_info: List[
             Dict[str, str]
@@ -72,7 +76,7 @@ class TestSecretsMigration(unittest.TestCase):
                 secret_name=secret.name,
                 secret_description=secret.secret_description,
                 secret=secret.secret_string,
-                kms_key_id="alias/secretsmanager"
+                kms_key_id="alias/secretsmanager",
             )
             return secrets_migration.migrate_account.get_secret(secret_id=arn)
 
@@ -84,8 +88,10 @@ class TestSecretsMigration(unittest.TestCase):
             {"test": "secret_fool"}
         )
         secrets_migration.current_account.put_secret(
-            secret_name="Testsecret", secret=secret, 
-            secret_description="Testing secret", kms_key_id="alias/secretsmanager"
+            secret_name="Testsecret",
+            secret=secret,
+            secret_description="Testing secret",
+            kms_key_id="alias/secretsmanager",
         )
         secret_info: List[
             Dict[str, str]
