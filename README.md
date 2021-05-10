@@ -1,9 +1,19 @@
 # SecretsManager migration
 
-This python module allows you to migrate all of your secrets from one aws account to another.    
+This python module allows you to migrate all of your secrets from one aws account to another.  
 
 
-## Requirements
+## AWS requirements
+
+* IAM roles / IAM users who have programmatic access to read/create secrets
+* Have at least a [CMK](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/kms-example-encrypt-decrypt-file.html) on the migration account that can be used to encrypt secrets
+<br>
+For programmatic ways to create one see [create_key](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/kms.html#KMS.Client.create_key) and [create_alias](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/kms.html#KMS.Client.delete_alias) documentation.  You can also see test_secrets_manager_api for examples.
+* Minimum of 1 secret on the primary account 
+
+
+
+## Python requirements
 
 The following modules are required for run:
 
@@ -14,6 +24,7 @@ The following modules are required to run under test:
 
 * boto3
 * moto
+* botostubs
 * json
 
 ## How to use
@@ -29,7 +40,7 @@ from secrets_migration.secrets_migration import SecretsMigration
         current_account="AWS PROFILE WITH SECRETS",
         migrating_account="AWS PROFILE YOU'RE MOVING SECRETS TO")
 
->>> secrets_migration.migrate_secrets()
+>>> secrets_migration.migrate_secrets(kms_key_id="alias/secrets_migration")
 True
 ```
 
