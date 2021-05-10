@@ -29,6 +29,7 @@ class SecretsManager:
         self,
         secret_name: str,
         secret: Union[str, bytes],
+        kms_key_id: str,
         secret_description: str = "",
     ) -> Union[Exception, str]:
         try:
@@ -36,14 +37,16 @@ class SecretsManager:
                 create_secret: Dict[
                     str, Union[str, List[str]]
                 ] = self.secrets_manager_client.create_secret(
-                    Name=secret_name, Description=secret_description, SecretBinary=secret
+                    Name=secret_name, Description=secret_description, 
+                    SecretBinary=secret, KmsKeyId=kms_key_id
                 )
 
             if isinstance(secret, str):
                 create_secret: Dict[
                     str, Union[str, List[str]]
                 ] = self.secrets_manager_client.create_secret(
-                    Name=secret_name, Description=secret_description, SecretString=secret
+                    Name=secret_name, Description=secret_description, 
+                    SecretString=secret, KmsKeyId=kms_key_id
                 )
             
             return create_secret["ARN"]

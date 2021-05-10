@@ -76,8 +76,14 @@ class SecretsMigration:
         except InvalidSecretError:
             return False
 
-    def migrate_secrets(self) -> Union[Exception, bool]:
+    def migrate_secrets(self, kms_key_id: str) -> Union[Exception, bool]:
         """Migrate your secrets from current_account to migrate_account
+        Args:
+            kms_key_id (str): The keyId used to encrypt the secrets for the 
+            MIGRATION account please use either:
+            * The ARN role
+            * The alias of the CMK must be "alias/alias_of_cmk" for it to work,
+            otherwise it will fail.
 
         Raises:
             NoMigrationAccountError: Raised when you have not specified an aws profile
@@ -111,6 +117,7 @@ class SecretsMigration:
                         if "SecretString" in secret.__dict__()
                         else secret.secret_binary,
                         secret_description=secret.secret_description,
+                        kms_key_id=kms_key_id
                     )
 
             return True
