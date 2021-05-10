@@ -8,7 +8,9 @@ This python module allows you to migrate all of your secrets from one aws accoun
 * IAM roles / IAM users who have programmatic access to read/create secrets
 * Have at least a [CMK](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/kms-example-encrypt-decrypt-file.html) on the migration account that can be used to encrypt secrets
 <br>
+
 For programmatic ways to create one see [create_key](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/kms.html#KMS.Client.create_key) and [create_alias](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/kms.html#KMS.Client.delete_alias) documentation.  You can also see test_secrets_manager_api for examples.
+
 * Minimum of 1 secret on the primary account 
 
 
