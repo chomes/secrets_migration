@@ -20,14 +20,12 @@ For programmatic ways to create one see [create_key](https://boto3.amazonaws.com
 The following modules are required for run:
 
 * boto3
-* json
 
 The following modules are required to run under test:
 
 * boto3
 * moto
 * botostubs
-* json
 
 ## How to use
 
