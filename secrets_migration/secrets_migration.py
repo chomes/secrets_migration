@@ -56,7 +56,7 @@ class SecretsMigration:
             secret: Secret = self.current_account.get_secret(
                 secret_id=secret_data["ARN"]
             )
-            secret.secret_description = secret_data["Description"]
+            secret.secret_description = secret_data["Description"] if "Description" in secret_data else ""
             secret_helpers.append(secret)
 
         return secret_helpers

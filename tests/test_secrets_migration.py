@@ -1,10 +1,10 @@
-from os import stat
 from moto import mock_secretsmanager, mock_kms
 from secrets_migration.secrets_migration import SecretsMigration
 from secrets_migration.secret import Secret
 from secrets_migration.exceptions import NoMigrationAccountError
 from typing import List, Dict
-import boto3, botostubs
+import boto3
+import botostubs
 import unittest
 import json
 
@@ -105,13 +105,15 @@ class TestSecretsMigration(unittest.TestCase):
         for secret in secret_helpers:
             created_secret.append(self.input_secret(secret=secret))
         self.assertEqual(
-            created_secret[0].secret_string, json.dumps({"test": "secret_fool"})
+            created_secret[0].secret_string, json.dumps(
+                {"test": "secret_fool"})
         )
 
     def test_migrating_account_not_existing(self):
         secrets_migration = SecretsMigration()
         with self.assertRaises(NoMigrationAccountError):
-            secrets_migration.migrate_secrets()
+            secrets_migration.migrate_secrets(
+                kms_key_id="alias/secretsmanager")
 
 
 if __name__ == "__main__":
